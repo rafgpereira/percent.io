@@ -12,7 +12,7 @@ secretNumber = parseInt(Math.abs((day*71137+(day*week*75320))*((week*day*week)*9
 
 
 
-const havePlayed = window.localStorage.getItem('day');
+const havePlayed = window.localStorage.getItem(day);
 if (havePlayed) {
     var node = document.getElementById('bar-button');
     if (node.parentNode) {
@@ -64,4 +64,4 @@ function loadGame(){
     } 
     document.getElementById("numInput").value = "";
 }
-window.localStorage.setItem('day', 'true');
+window.localStorage.setItem(day, 'true');
