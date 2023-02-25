@@ -16,6 +16,9 @@ secretNumber = parseInt(
 );
 document.body.style.setProperty("--progress", secretNumber);
 
+// Teantativas
+const intialAttempts = window.localStorage.getItem(`${day}-attemps`) || 3;
+
 //Bloqueio de reload no mesmo dia:
 const havePlayed = window.localStorage.getItem(day);
 if (havePlayed) {
@@ -33,7 +36,9 @@ if (havePlayed) {
     } horas e ${60 - minutes} minutos.`;
   }
 } else {
-  alert("Adivinhe a porcentagem indicada na barra em 4 tentativas.");
+  alert(
+    `Adivinhe a porcentagem indicada na barra em ${intialAttempts} tentativas.`
+  );
 }
 
 //Execução do button com enter:
@@ -44,9 +49,11 @@ function enterPress(event) {
 }
 
 //Função lógica:
-let attempts = 4;
-let available = 0;
 function loadGame() {
+  const savedAttemps = window.localStorage.getItem(`${day}-attemps`);
+  let attempts = savedAttemps ? parseInt(savedAttemps) : 3;
+  let available = 0;
+
   //Declaração de divs de texto:
   const p = document.getElementById("write");
   const correct = document.getElementById("correct");
@@ -55,10 +62,23 @@ function loadGame() {
 
   //Coleta do palpite e condições/comparações:
   let guessNumber = parseInt(document.getElementById("numInput").value);
-  if (guessNumber === secretNumber&& available == 0) {
+
+  if (
+    (guessNumber > 100 && available == 0) ||
+    (guessNumber < 1 && available == 0)
+  ) {
+    if (attempts > 1) {
+      p.textContent = `Apenas valores entre 1 e 100. Restam ${attempts} tentativas.`;
+    } else {
+      p.textContent = `Apenas valores entre 1 e 100. Resta ${attempts} tentativa.`;
+    }
+    return;
+  }
+
+  if (guessNumber === secretNumber && available == 0) {
     p.textContent = ``;
     correct.textContent = `Parabéns, a resposta é ${guessNumber}%. Acerto na ${
-      5 - attempts
+      4 - attempts
     }ª tentativa.`;
     if (24 - hour < 1) {
       time.textContent = `Novo jogo em ${60 - minutes} minutos.`;
@@ -83,26 +103,23 @@ function loadGame() {
     available++;
     window.localStorage.setItem(day, "true");
     return 0;
-  } else if ((guessNumber > 100 && available == 0) || (guessNumber < 1 && available == 0)) {
-    if (attempts > 1) {
-      p.textContent = `Apenas valores entre 1 e 100. Restam ${attempts} tentativas.`;
-    } else {
-      p.textContent = `Apenas valores entre 1 e 100. Resta ${attempts} tentativa.`;
-    }
   } else if (guessNumber > secretNumber && available == 0) {
-    attempts--;
+    window.localStorage.setItem(`${day}-attemps`, attempts - 1);
     if (attempts > 1) {
-      p.textContent = `A resposta é MENOR que ${guessNumber}%. Restam ${attempts} tentativas.`;
+      p.textContent = `A resposta é MENOR que ${guessNumber}%. Restam ${
+        attempts - 1
+      } tentativas.`;
     } else {
-      p.textContent = `A resposta é MENOR que ${guessNumber}%. Resta ${attempts} tentativa.`;
+      p.textContent = `A resposta é MENOR que ${guessNumber}%. Resta ${
+        attempts - 1
+      } tentativa.`;
     }
   } else if (guessNumber < secretNumber && available == 0) {
-    attempts--;
-    if (attempts > 1) {
-      p.textContent = `A resposta é MAIOR que ${guessNumber}%. Restam ${attempts} tentativas.`;
-    } else {
-      p.textContent = `A resposta é MAIOR que ${guessNumber}%. Resta ${attempts} tentativa.`;
-    }
+    window.localStorage.setItem(`${day}-attemps`, attempts - 1);
+
+    p.textContent = `A resposta é MAIOR que ${guessNumber}%. ${
+      attempts > 1 ? "Restam" : "Resta"
+    } ${attempts - 1} ${attempts > 1 ? "tentativas" : "tentativa"}.`;
   }
   //Limpa input após recolher entrada:
   document.getElementById("numInput").value = "";
