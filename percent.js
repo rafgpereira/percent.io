@@ -45,7 +45,7 @@ function enterPress(event) {
 
 //Função lógica:
 let attempts = 4;
-let a = 0;
+let available = 0;
 function loadGame() {
   //Declaração de divs de texto:
   const p = document.getElementById("write");
@@ -55,7 +55,7 @@ function loadGame() {
 
   //Coleta do palpite e condições/comparações:
   let guessNumber = parseInt(document.getElementById("numInput").value);
-  if (guessNumber === secretNumber&& a == 0) {
+  if (guessNumber === secretNumber&& available == 0) {
     p.textContent = ``;
     correct.textContent = `Parabéns, a resposta é ${guessNumber}%. Acerto na ${
       5 - attempts
@@ -67,10 +67,10 @@ function loadGame() {
         60 - minutes
       } minutos.`;
     }
-    a++;
+    available++;
     window.localStorage.setItem(day, "true");
     return 0;
-  } else if (attempts === 1 && a == 0) {
+  } else if (attempts === 1 && available == 0) {
     p.textContent = ``;
     lose.textContent = `As tentativas acabaram. A resposta era ${secretNumber}%.`;
     if (24 - hour < 1) {
@@ -80,23 +80,23 @@ function loadGame() {
         60 - minutes
       } minutos.`;
     }
-    a++;
+    available++;
     window.localStorage.setItem(day, "true");
     return 0;
-  } else if ((guessNumber > 100 && a == 0) || (guessNumber < 1 && a == 0)) {
+  } else if ((guessNumber > 100 && available == 0) || (guessNumber < 1 && available == 0)) {
     if (attempts > 1) {
       p.textContent = `Apenas valores entre 1 e 100. Restam ${attempts} tentativas.`;
     } else {
       p.textContent = `Apenas valores entre 1 e 100. Resta ${attempts} tentativa.`;
     }
-  } else if (guessNumber > secretNumber && a == 0) {
+  } else if (guessNumber > secretNumber && available == 0) {
     attempts--;
     if (attempts > 1) {
       p.textContent = `A resposta é MENOR que ${guessNumber}%. Restam ${attempts} tentativas.`;
     } else {
       p.textContent = `A resposta é MENOR que ${guessNumber}%. Resta ${attempts} tentativa.`;
     }
-  } else if (guessNumber < secretNumber && a == 0) {
+  } else if (guessNumber < secretNumber && available == 0) {
     attempts--;
     if (attempts > 1) {
       p.textContent = `A resposta é MAIOR que ${guessNumber}%. Restam ${attempts} tentativas.`;
