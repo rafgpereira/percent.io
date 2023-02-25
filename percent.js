@@ -1,99 +1,109 @@
 //Definições de tempo:
 let data = new Date();
 let day = data.getDate();
-let week = data.getDay()+1;
-let hour = data.getHours()+1;
-let minutes = data.getMinutes()+1;
+let week = data.getDay() + 1;
+let hour = data.getHours() + 1;
+let minutes = data.getMinutes() + 1;
 
 //Cálculo da porcentagem baseada no tempo e aplicação na barra:
 let secretNumber;
-day=day+52+week*3;
-week= week+23+day*2;
-secretNumber = parseInt(Math.abs((day*71137+(day*week*75320))*((week*day*week)*97935)%100));
-document.body.style.setProperty('--progress', secretNumber);
+day = day + 52 + week * 3;
+week = week + 23 + day * 2;
+secretNumber = parseInt(
+  Math.abs(
+    ((day * 71137 + day * week * 75320) * (week * day * week * 97935)) % 100
+  )
+);
+document.body.style.setProperty("--progress", secretNumber);
 
 //Bloqueio de reload no mesmo dia:
 const havePlayed = window.localStorage.getItem(day);
 if (havePlayed) {
-    var node = document.getElementById('bar-button');
-    if (node.parentNode) {
-        node.parentNode.removeChild(node);
-    }
-    if(24-hour<1){
-        document.getElementById('write').textContent = `Novo jogo em ${60-minutes} minutos.`;
-    } else{
-        document.getElementById('write').textContent = `Novo jogo em ${24-hour} horas e ${60-minutes} minutos.`;
-    }
-}else{
-    alert("Adivinhe a porcentagem indicada na barra em 4 tentativas.");
+  var node = document.getElementById("bar-button");
+  if (node.parentNode) {
+    node.parentNode.removeChild(node);
+  }
+  if (24 - hour < 1) {
+    document.getElementById("write").textContent = `Novo jogo em ${
+      60 - minutes
+    } minutos.`;
+  } else {
+    document.getElementById("write").textContent = `Novo jogo em ${
+      24 - hour
+    } horas e ${60 - minutes} minutos.`;
+  }
+} else {
+  alert("Adivinhe a porcentagem indicada na barra em 4 tentativas.");
 }
 
 //Execução do button com enter:
 function enterPress(event) {
-    if (event.key === 'Enter') {
-      document.getElementById("guess").click();
-      return false;
-    }
-    return true;
-}   
+  if (event.key === "Enter") {
+    document.getElementById("guess").click();
+  }
+}
 
 //Função lógica:
 let attempts = 4;
-let a=0;
-function loadGame(){
-    //Declaração de divs de texto:
-    const p = document.getElementById('write');
-    const correct = document.getElementById('correct');
-    const lose = document.getElementById('lose');
-    const time = document.getElementById('time');
+let a = 0;
+function loadGame() {
+  //Declaração de divs de texto:
+  const p = document.getElementById("write");
+  const correct = document.getElementById("correct");
+  const lose = document.getElementById("lose");
+  const time = document.getElementById("time");
 
-    //Coleta do palpite e condições/comparações:
-    let guessNumber = parseInt(document.getElementById("numInput").value);
-    if(guessNumber===secretNumber){
-        p.textContent = ``;
-        correct.textContent = `Parabéns, a resposta é ${guessNumber}%. Acerto na ${(5-attempts)}ª tentativa.`;
-        if(24-hour<1){
-            time.textContent = `Novo jogo em ${60-minutes} minutos.`;
-        }else{
-            time.textContent = `Novo jogo em ${24-hour} horas e ${60-minutes} minutos.`;
-        }
-        a++;
-        window.localStorage.setItem(day, 'true');
-        return 0;
-    } else if(attempts===1 && a==0){
-        p.textContent=``;
-        lose.textContent = `As tentativas acabaram. A resposta era ${secretNumber}%.`;
-        if(24-hour<1){
-            time.textContent = `Novo jogo em ${60-minutes} minutos.`;
-        }else{ 
-            time.textContent = `Novo jogo em ${24-hour} horas e ${60-minutes} minutos.`;
-        }
-        window.localStorage.setItem(day, 'true');
-        return 0;
-    } else if((guessNumber>100&&a==0)||(guessNumber<1 && a==0)){
-        if(attempts>1){
-            p.textContent = `Apenas valores entre 1 e 100. Restam ${attempts} tentativas.`;
-        } else{
-            p.textContent = `Apenas valores entre 1 e 100. Resta ${attempts} tentativa.`;
-        }
-            
-    } else if( guessNumber>secretNumber && a==0){
-        attempts--;
-        if(attempts>1){
-            p.textContent = `A resposta é MENOR que ${guessNumber}%. Restam ${attempts} tentativas.`;
-        } else{
-            p.textContent = `A resposta é MENOR que ${guessNumber}%. Resta ${attempts} tentativa.`;
-        }
-    } else if(guessNumber<secretNumber&& a==0){
-        attempts--;
-        if(attempts>1){
-            p.textContent = `A resposta é MAIOR que ${guessNumber}%. Restam ${attempts} tentativas.`;
-        } else{
-            p.textContent = `A resposta é MAIOR que ${guessNumber}%. Resta ${attempts} tentativa.`;
-        }
-        
-    } 
-    //Limpa input após recolher entrada:
-    document.getElementById("numInput").value = "";
+  //Coleta do palpite e condições/comparações:
+  let guessNumber = parseInt(document.getElementById("numInput").value);
+  if (guessNumber === secretNumber&& a == 0) {
+    p.textContent = ``;
+    correct.textContent = `Parabéns, a resposta é ${guessNumber}%. Acerto na ${
+      5 - attempts
+    }ª tentativa.`;
+    if (24 - hour < 1) {
+      time.textContent = `Novo jogo em ${60 - minutes} minutos.`;
+    } else {
+      time.textContent = `Novo jogo em ${24 - hour} horas e ${
+        60 - minutes
+      } minutos.`;
+    }
+    a++;
+    window.localStorage.setItem(day, "true");
+    return 0;
+  } else if (attempts === 1 && a == 0) {
+    p.textContent = ``;
+    lose.textContent = `As tentativas acabaram. A resposta era ${secretNumber}%.`;
+    if (24 - hour < 1) {
+      time.textContent = `Novo jogo em ${60 - minutes} minutos.`;
+    } else {
+      time.textContent = `Novo jogo em ${24 - hour} horas e ${
+        60 - minutes
+      } minutos.`;
+    }
+    a++;
+    window.localStorage.setItem(day, "true");
+    return 0;
+  } else if ((guessNumber > 100 && a == 0) || (guessNumber < 1 && a == 0)) {
+    if (attempts > 1) {
+      p.textContent = `Apenas valores entre 1 e 100. Restam ${attempts} tentativas.`;
+    } else {
+      p.textContent = `Apenas valores entre 1 e 100. Resta ${attempts} tentativa.`;
+    }
+  } else if (guessNumber > secretNumber && a == 0) {
+    attempts--;
+    if (attempts > 1) {
+      p.textContent = `A resposta é MENOR que ${guessNumber}%. Restam ${attempts} tentativas.`;
+    } else {
+      p.textContent = `A resposta é MENOR que ${guessNumber}%. Resta ${attempts} tentativa.`;
+    }
+  } else if (guessNumber < secretNumber && a == 0) {
+    attempts--;
+    if (attempts > 1) {
+      p.textContent = `A resposta é MAIOR que ${guessNumber}%. Restam ${attempts} tentativas.`;
+    } else {
+      p.textContent = `A resposta é MAIOR que ${guessNumber}%. Resta ${attempts} tentativa.`;
+    }
+  }
+  //Limpa input após recolher entrada:
+  document.getElementById("numInput").value = "";
 }
-
