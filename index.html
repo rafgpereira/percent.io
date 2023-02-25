@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html lang="PT-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="percent.js" defer></script>
-    <link rel="icon" type="image/png" href="favicon2.png"/>
+    <link rel="icon" type="image/png" href="favicon2.png" />
     <title>percent.io</title>
 </head>
+
 <body>
     <h1>percent.io</h1>
     <div class="progress-bar"></div>
     <div class="bar-button" id="bar-button">
-        <input placeholder="Digite um número " class="inpt"type="number" id="numInput"onkeypress="return enterPress(event)" required>
-        <button id="guess" class= "btn first" type="button" onClick="loadGame()">GUESS</button>
+        <input placeholder="Digite um número " class="inpt" type="number" id="numInput"
+            onkeypress="return enterPress(event)" required>
+        <button id="guess" class="btn first" type="button" onClick="loadGame()">GUESS</button>
     </div>
 
     <p class="write" id="write"></p>
-    <p class = "correct" id="correct"></p>
-    <p class = "lose" id="lose"></p>
+    <p class="correct" id="correct"></p>
+    <p class="lose" id="lose"></p>
     <footer class=" time" id="time"></footer>
-    <footer class="credits"><b>@rafgpereira</b></footer>
+    <footer class="credits">
+        <a href="https://github.com/rafgpereira">
+            <b>@rafgpereira</b>
+        </a>
+    </footer>
 </body>
+
 </html>
