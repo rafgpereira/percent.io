@@ -14,6 +14,9 @@ secretNumber = parseInt(
     ((day * 71137 + day * week * 75320) * (week * day * week * 97935)) % 100
   )
 );
+if (secretNumber==0){
+  secretNumber=1;
+}
 document.body.style.setProperty("--progress", secretNumber);
 
 // Teantativas
@@ -27,13 +30,11 @@ if (havePlayed) {
     node.parentNode.removeChild(node);
   }
   if (24 - hour < 1) {
-    document.getElementById("write").textContent = `Novo jogo em ${
-      60 - minutes
-    } minutos.`;
+    document.getElementById("write").textContent = `Novo jogo em ${60 - minutes
+      } minutos.`;
   } else {
-    document.getElementById("write").textContent = `Novo jogo em ${
-      24 - hour
-    } horas e ${60 - minutes} minutos.`;
+    document.getElementById("write").textContent = `Novo jogo em ${24 - hour
+      } horas e ${60 - minutes} minutos.`;
   }
 } else {
   alert(
@@ -77,15 +78,13 @@ function loadGame() {
 
   if (guessNumber === secretNumber && available == 0) {
     p.textContent = ``;
-    correct.textContent = `Parabéns, a resposta é ${guessNumber}%. Acerto na ${
-      4 - attempts
-    }ª tentativa.`;
+    correct.textContent = `Parabéns, a resposta é ${guessNumber}%. Acerto na ${4 - attempts
+      }ª tentativa.`;
     if (24 - hour < 1) {
       time.textContent = `Novo jogo em ${60 - minutes} minutos.`;
     } else {
-      time.textContent = `Novo jogo em ${24 - hour} horas e ${
-        60 - minutes
-      } minutos.`;
+      time.textContent = `Novo jogo em ${24 - hour} horas e ${60 - minutes
+        } minutos.`;
     }
     available++;
     window.localStorage.setItem(day, "true");
@@ -96,9 +95,8 @@ function loadGame() {
     if (24 - hour < 1) {
       time.textContent = `Novo jogo em ${60 - minutes} minutos.`;
     } else {
-      time.textContent = `Novo jogo em ${24 - hour} horas e ${
-        60 - minutes
-      } minutos.`;
+      time.textContent = `Novo jogo em ${24 - hour} horas e ${60 - minutes
+        } minutos.`;
     }
     available++;
     window.localStorage.setItem(day, "true");
@@ -106,20 +104,17 @@ function loadGame() {
   } else if (guessNumber > secretNumber && available == 0) {
     window.localStorage.setItem(`${day}-attemps`, attempts - 1);
     if (attempts > 1) {
-      p.textContent = `A resposta é MENOR que ${guessNumber}%. Restam ${
-        attempts - 1
-      } tentativas.`;
+      p.textContent = `A resposta é MENOR que ${guessNumber}%. Restam ${attempts - 1
+        } tentativas.`;
     } else {
-      p.textContent = `A resposta é MENOR que ${guessNumber}%. Resta ${
-        attempts - 1
-      } tentativa.`;
+      p.textContent = `A resposta é MENOR que ${guessNumber}%. Resta ${attempts - 1
+        } tentativa.`;
     }
   } else if (guessNumber < secretNumber && available == 0) {
     window.localStorage.setItem(`${day}-attemps`, attempts - 1);
 
-    p.textContent = `A resposta é MAIOR que ${guessNumber}%. ${
-      attempts > 1 ? "Restam" : "Resta"
-    } ${attempts - 1} ${attempts > 1 ? "tentativas" : "tentativa"}.`;
+    p.textContent = `A resposta é MAIOR que ${guessNumber}%. ${attempts > 1 ? "Restam" : "Resta"
+      } ${attempts - 1} ${attempts > 1 ? "tentativas" : "tentativa"}.`;
   }
   //Limpa input após recolher entrada:
   document.getElementById("numInput").value = "";
