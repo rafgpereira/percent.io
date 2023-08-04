@@ -5,30 +5,39 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <script src="percent.js" defer></script>
-    <link rel="icon" type="image/png" href="favicon2.png" />
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/percent.js" defer></script>
+    <link rel="icon" type="image/png" href="img/favicon2.png" />
     <title>percent.io</title>
 </head>
 
 <body>
-    <h1>percent.io</h1>
+    <h1 class="title">percent.io</h1>
     <div class="progress-bar"></div>
     <div class="bar-button" id="bar-button">
-        <input placeholder="Digite um número " class="inpt" type="number" id="numInput"
-            onkeypress="return enterPress(event)" required>
-        <button id="guess" class="btn first" type="button" onClick="loadGame()">GUESS</button>
+        <input placeholder="Digite um número " class="inpt" type="number" id="numInput">
+        <button id="guess" class="btn" type="button">GUESS</button>
     </div>
 
-    <p class="write" id="write"></p>
-    <p class="correct" id="correct"></p>
-    <p class="lose" id="lose"></p>
+    <p class="dica"></p>
+    <p class="tentativas-restantes"></p>
     <footer class=" time" id="time"></footer>
     <footer class="credits">
         <a href="https://github.com/rafgpereira">
             <b>@rafgpereira</b>
         </a>
     </footer>
+    <dialog id="bem-vindo">
+        <h2>percent.io</h2>
+        <p>Adivinhe a porcentagem diária indicada na barra amarela em até 3 tentativas!</p>
+        <p>Dica: tente números entre 0 e 100.</p>
+        <input type="button" value="Começar!" id="botao-popup-iniciar">
+    </dialog>
+    <dialog id="popup">
+        <h2 id="h2-popup"></h2>
+        <p id="p-popup"></p>
+        <input type="button" id="botao-popup" value="OK">
+    </dialog>
 </body>
 
 </html>
