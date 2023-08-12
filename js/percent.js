@@ -1,12 +1,12 @@
 //Geração de dados úteis para o funcionamento:
-geraDados()
 function geraDados() {
     let novaData = new Date()
     let dia = novaData.getDate()
     let mes = novaData.getMonth()
     let ano = novaData.getFullYear()
-    let hora = novaData.getHours() + 1
-    let minuto = novaData.getMinutes() + 1
+    let hora = novaData.getHours()
+    let minuto = novaData.getMinutes()
+    let segundo = novaData.getSeconds()
     const numeroSecreto = parseInt((ano+(mes*dia**3))%100)
     const dadosGerados = {
         dia: dia,
@@ -14,6 +14,7 @@ function geraDados() {
         ano: ano,
         hora: hora,
         minuto: minuto,
+        segundo: segundo,
         numeroSecreto: numeroSecreto
     }
     document.body.style.setProperty("--progress", dadosGerados.numeroSecreto);
@@ -130,7 +131,9 @@ function avisoDerrota() {
     }, 0);
     tempoNovoJogo()
 }
+
+
 function tempoNovoJogo() {
-    informacaoDica.innerHTML = `Novo jogo em ${24 - dados.hora} hora(s) e ${60 - dados.minuto} minuto(s).`
+    informacaoDica.innerHTML = `Novo jogo em </br> ${23 - dados.hora}:${59 - dados.minuto}:${59 - dados.segundo}`
     informacaoDica.style.color = `#f1c40f`
 }
