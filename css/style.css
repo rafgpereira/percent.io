@@ -71,6 +71,7 @@ h1 {
 .dica{
   text-align: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bolder;
   font-size: 1.5rem;
   margin-top: 50px;
 }
