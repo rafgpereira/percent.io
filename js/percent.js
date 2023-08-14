@@ -103,13 +103,14 @@ function verificaChute(tentativasRestantes) {
   if (numeroChute == numeroSecreto) {
     localStorage.setItem(`${ano}${mes}${dia}`, 0);
     avisoVitoria(tentativasRestantes);
+    removeEntrada()
   } else {
     if (numeroChute > numeroSecreto) {
-      informacaoDica.innerHTML = `Muito alto!`;
+      informacaoDica.innerHTML += `<span style="color: #00e1ff;">${numeroChute} está acima!</br>`;
       informacaoDica.style.color = `#00e1ff`;
       console.log(numeroChute +" acima " + tentativasRestantes)
     } else {
-      informacaoDica.innerHTML = `Muito baixo!`;
+      informacaoDica.innerHTML += `<span style="color: #ff1b1b;">${numeroChute} está abaixo!</br>`;
       informacaoDica.style.color = `#ff1b1b`;
       console.log(numeroChute + " abaixo " + tentativasRestantes)
     }
@@ -126,26 +127,30 @@ function verificaChute(tentativasRestantes) {
   main()
 }
 
+const {botaoChute, campoEntrada} = declaracoes()
+const {ano, mes, dia} = geraData()
+botaoChute.addEventListener("click", function () {
+  if (localStorage.getItem(`${ano}${mes}${dia}`) > 0) {
+    verificaChute(main());
+  }
+});
+campoEntrada.addEventListener("keydown", function verificaTecla(event) {
+  if (event.key == "Enter") {
+    if (localStorage.getItem(`${ano}${mes}${dia}`) > 0) {
+      verificaChute(main());
+    }
+  }
+});
+
 function main() {
   geraNumeroSecreto();
   tentativasDiarias();
-  const {botaoChute, campoEntrada, informacaoTentativa} = declaracoes()
+  const {informacaoTentativa} = declaracoes()
   const { dia, mes, ano } = geraData();
   const tentativasRestantes = parseInt(
     localStorage.getItem(`${ano}${mes}${dia}`)
   );
   informacaoTentativa.innerHTML = `Tentativas restantes: ${tentativasRestantes}`
-  botaoChute.addEventListener("click", function () {
-    if (localStorage.getItem(`${ano}${mes}${dia}`) > 0) {
-      verificaChute(tentativasRestantes);
-    }
-  });
-  campoEntrada.addEventListener("keydown", function verificaTecla(event) {
-    if (event.key == "Enter") {
-      if (localStorage.getItem(`${ano}${mes}${dia}`) > 0) {
-        verificaChute(tentativasRestantes);
-      }
-    }
-  });
+    return tentativasRestantes
 }
-main();
+main()
