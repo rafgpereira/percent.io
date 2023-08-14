@@ -33,6 +33,24 @@ function declaracoes() {
   return { informacaoDica, informacaoTentativa, botaoChute, campoEntrada, popup, popupTitulo, popupTexto, popupBotao}
 }
 
+//Função que remove os Inputs apos o jogo:
+function removeEntrada() {
+  const {botaoChute, informacaoTentativa, campoEntrada} = declaracoes()
+botaoChute.remove();
+campoEntrada.remove();
+informacaoTentativa.remove();
+}
+
+function tempoNovoJogo() {
+  const {informacaoDica} = declaracoes() 
+setInterval(() => {
+  const tempoRestante = editaHora();
+  informacaoDica.innerHTML = `Novo jogo em </br> ${tempoRestante}`;
+}, 0);
+
+informacaoDica.style.color = `#f1c40f`;
+}
+
 function tentativasDiarias() {
   const { dia, mes, ano } = geraData();
   const {popup, popupBotao} = declaracoes()
@@ -48,93 +66,75 @@ function tentativasDiarias() {
   }
 }
 
+//Funções que apresentam os popup's:
+function avisoVitoria(tentativasRestantes) {
+  const {popup, popupBotao, popupTexto, popupTitulo} = declaracoes()
+popupBotao.addEventListener("click", () => {
+  popup.close();
+});
+setTimeout(() => {
+  popup.showModal();
+  popupTitulo.innerHTML = "Parabéns!";
+  popupTexto.innerHTML = `O número secreto é ${geraNumeroSecreto()}! </br> Tentativas utilizadas: ${ 4 - tentativasRestantes}`;
+}, 0);
+tempoNovoJogo();
+
+}
+
+function avisoDerrota() {
+  const {popup, popupBotao, popupTexto, popupTitulo} = declaracoes()
+popupBotao.addEventListener("click", () => {
+  popup.close();
+});
+setTimeout(() => {
+  popup.showModal();
+  popupTitulo.innerHTML = "Ops!";
+  popupTexto.innerHTML = `As tentativas acabaram! </br> O número secreto era ${geraNumeroSecreto()}. </br> Tente novamente amanhã.`;
+}, 0);
+tempoNovoJogo();
+}
+
 //Função que verifica o chute e responde:
 function verificaChute(tentativasRestantes) {
   const { dia, mes, ano } = geraData();
-  const {informacaoDica, informacaoTentativa, campoEntrada} = declaracoes()
+  const {informacaoDica, campoEntrada} = declaracoes()
   const numeroChute = campoEntrada.value;
   const numeroSecreto = geraNumeroSecreto();
   if (numeroChute == numeroSecreto) {
     localStorage.setItem(`${ano}${mes}${dia}`, 0);
-    removeEntrada();
     avisoVitoria(tentativasRestantes);
-  } else if (numeroChute != numeroSecreto) {
-    if (numeroChute < numeroSecreto) {
-      informacaoDica.innerHTML = `Muito baixo!`;
-      informacaoDica.style.color = `#ff1b1b`;
-      informacaoTentativa.innerHTML = `Tentativas restantes: ${
-        tentativasRestantes - 1
-        
-      }`;
-    } else {
+  } else {
+    if (numeroChute > numeroSecreto) {
       informacaoDica.innerHTML = `Muito alto!`;
       informacaoDica.style.color = `#00e1ff`;
-      informacaoTentativa.innerHTML = `Tentativas restantes: ${
-        tentativasRestantes - 1
-      }`;
+      console.log(numeroChute +" acima " + tentativasRestantes)
+    } else {
+      informacaoDica.innerHTML = `Muito baixo!`;
+      informacaoDica.style.color = `#ff1b1b`;
+      console.log(numeroChute + " abaixo " + tentativasRestantes)
     }
+
     tentativasRestantes--;
     localStorage.setItem(`${ano}${mes}${dia}`, tentativasRestantes);
     if (tentativasRestantes == 0) {
         tentativasDiarias()
       avisoDerrota();
     }
+
   }
   campoEntrada.value = "";
   main()
 }
 
-//Função que remove os Inputs apos o jogo:
-function removeEntrada() {
-    const {botaoChute, informacaoTentativa, campoEntrada} = declaracoes()
-  botaoChute.remove();
-  campoEntrada.remove();
-  informacaoTentativa.remove();
-}
-
-//Funções que apresentam os popup's:
-function avisoVitoria(tentativasRestantes) {
-    const {popup, popupBotao, popupTexto, popupTitulo} = declaracoes()
-  popupBotao.addEventListener("click", () => {
-    popup.close();
-  });
-  setTimeout(() => {
-    popup.showModal();
-    popupTitulo.innerHTML = "Parabéns!";
-    popupTexto.innerHTML = `O número secreto é ${geraNumeroSecreto()}! </br> Tentativas utilizadas: ${4 - tentativasRestantes}`;
-  }, 0);
-  tempoNovoJogo();
-}
-function avisoDerrota() {
-    const {popup, popupBotao, popupTexto, popupTitulo} = declaracoes()
-  popupBotao.addEventListener("click", () => {
-    popup.close();
-  });
-  setTimeout(() => {
-    popup.showModal();
-    popupTitulo.innerHTML = "Ops!";
-    popupTexto.innerHTML = `As tentativas acabaram! </br> O número secreto era ${geraNumeroSecreto()}. </br> Tente novamente amanhã.`;
-  }, 0);
-  tempoNovoJogo();
-}
-function tempoNovoJogo() {
-    const {informacaoDica} = declaracoes() 
-  setInterval(() => {
-    const tempoRestante = editaHora();
-    informacaoDica.innerHTML = `Novo jogo em </br> ${tempoRestante}`;
-  }, 0);
-
-  informacaoDica.style.color = `#f1c40f`;
-}
-
 function main() {
   geraNumeroSecreto();
   tentativasDiarias();
-  const {botaoChute, campoEntrada} = declaracoes()
+  const {botaoChute, campoEntrada, informacaoTentativa} = declaracoes()
   const { dia, mes, ano } = geraData();
-  let tentativasRestantes = parseInt(
+  const tentativasRestantes = parseInt(
     localStorage.getItem(`${ano}${mes}${dia}`)
   );
+  informacaoTentativa.innerHTML = `Tentativas restantes: ${tentativasRestantes}`
   botaoChute.addEventListener("click", function () {
     if (localStorage.getItem(`${ano}${mes}${dia}`) > 0) {
       verificaChute(tentativasRestantes);
