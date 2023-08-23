@@ -1,156 +1,156 @@
 //Geração de dados úteis para o funcionamento:
-function geraData() {
-  const novaData = new Date();
-  const dia = novaData.getDate();
-  const mes = novaData.getMonth();
-  const ano = novaData.getFullYear();
-  const hora = (23 - novaData.getHours()).toString();
-  const minuto = (59 - novaData.getMinutes()).toString();
-  const segundo = (59 - novaData.getSeconds()).toString();
+function getDate() {
+  const newDate = new Date();
+  const day = newDate.getDate();
+  const month = newDate.getMonth();
+  const year = newDate.getFullYear();
+  const hour = (23 - newDate.getHours()).toString();
+  const minute = (59 - newDate.getMinutes()).toString();
+  const second = (59 - newDate.getSeconds()).toString();
 
-  return { dia, mes, ano, hora, minuto, segundo };
+  return { day, month, year, hour, minute, second };
 }
-function editaHora() {
-  const { hora, minuto, segundo } = geraData();
-  return `${hora.padStart(2, "0")}:${minuto.padStart(2,"0")}:${segundo.padStart(2, "0")}`;
+function editTime() {
+  const { hour, minute, second } = getDate();
+  return `${hour.padStart(2, "0")}:${minute.padStart(2,"0")}:${second.padStart(2, "0")}`;
 }
-function geraNumeroSecreto() {
-  const { dia, mes, ano } = geraData();
-  const numeroSecreto = parseInt((ano + mes * dia ** 3) % 100);
-  document.body.style.setProperty("--progress", numeroSecreto);
-  return numeroSecreto;
+function createSecretNumber() {
+  const { day, month, year } = getDate();
+  const secretNumber = parseInt((year + month * day ** 3) % 100);
+  document.body.style.setProperty("--progress", secretNumber);
+  return secretNumber;
 }
 //Declarações:
-function declaracoes() {
-  const informacaoDica = document.querySelector(".dica");
-  const informacaoTentativa = document.querySelector(".tentativas-restantes");
-  const botaoChute = document.querySelector("#guess");
-  const campoEntrada = document.querySelector("#numInput");
+function declarations() {
+  const tipInformation = document.querySelector(".tip");
+  const attemptInformation = document.querySelector(".remaining-attempts");
+  const guessButton = document.querySelector("#guess");
+  const numberInput = document.querySelector("#numInput");
   const popup = document.querySelector("#popup");
-  const popupTitulo = document.querySelector("#h2-popup");
-  const popupTexto = document.querySelector("#p-popup");
-  const popupBotao = document.querySelector("#botao-popup");
-  return { informacaoDica, informacaoTentativa, botaoChute, campoEntrada, popup, popupTitulo, popupTexto, popupBotao}
+  const popupTitle = document.querySelector("#h2-popup");
+  const popupText = document.querySelector("#p-popup");
+  const popupButton = document.querySelector("#botao-popup");
+  return { tipInformation, attemptInformation, guessButton, numberInput, popup, popupTitle, popupText, popupButton}
 }
 
 //Função que remove os Inputs apos o jogo:
-function removeEntrada() {
-  const {botaoChute, informacaoTentativa, campoEntrada} = declaracoes()
-botaoChute.remove();
-campoEntrada.remove();
-informacaoTentativa.remove();
+function removeInput() {
+  const {guessButton, attemptInformation, numberInput} = declarations()
+guessButton.remove();
+numberInput.remove();
+attemptInformation.remove();
 }
 
-function tempoNovoJogo() {
-  const {informacaoDica} = declaracoes() 
+function newGameTime() {
+  const {tipInformation} = declarations() 
 setInterval(() => {
-  const tempoRestante = editaHora();
-  informacaoDica.innerHTML = `Novo jogo em </br> ${tempoRestante}`;
+  const timeLeft = editTime();
+  tipInformation.innerHTML = `Novo jogo em </br> ${timeLeft}`;
 }, 0);
 
-informacaoDica.style.color = `#f1c40f`;
+tipInformation.style.color = `#f1c40f`;
 }
 
-function tentativasDiarias() {
-  const { dia, mes, ano } = geraData();
-  const {popup, popupBotao} = declaracoes()
-  if (!localStorage.getItem(`${ano}${mes}${dia}`)) {
-    localStorage.setItem(`${ano}${mes}${dia}`, 3);
+function dailyAttempts() {
+  const { day, month, year } = getDate();
+  const {popup, popupButton} = declarations()
+  if (!localStorage.getItem(`${year}${month}${day}`)) {
+    localStorage.setItem(`${year}${month}${day}`, 3);
     popup.showModal();
-    popupBotao.addEventListener("click", () => {
+    popupButton.addEventListener("click", () => {
       popup.close();
     });
-  } else if (localStorage.getItem(`${ano}${mes}${dia}`) == 0) {
-    removeEntrada();
-    tempoNovoJogo();
+  } else if (localStorage.getItem(`${year}${month}${day}`) == 0) {
+    removeInput();
+    newGameTime();
   }
 }
 
 //Funções que apresentam os popup's:
-function avisoVitoria(tentativasRestantes) {
-  const {popup, popupBotao, popupTexto, popupTitulo} = declaracoes()
-popupBotao.addEventListener("click", () => {
+function victoryWarning(remainingAttempts) {
+  const {popup, popupButton, popupText, popupTitle} = declarations()
+popupButton.addEventListener("click", () => {
   popup.close();
 });
 setTimeout(() => {
   popup.showModal();
-  popupTitulo.innerHTML = "Parabéns!";
-  popupTexto.innerHTML = `O número secreto é ${geraNumeroSecreto()}! </br> Tentativas utilizadas: ${ 4 - tentativasRestantes}`;
+  popupTitle.innerHTML = "Parabéns!";
+  popupText.innerHTML = `O número secreto é ${createSecretNumber()}! </br> Tentativas utilizadas: ${ 4 - remainingAttempts}`;
 }, 0);
-tempoNovoJogo();
+newGameTime();
 
 }
 
-function avisoDerrota() {
-  const {popup, popupBotao, popupTexto, popupTitulo} = declaracoes()
-popupBotao.addEventListener("click", () => {
+function defeatWarning() {
+  const {popup, popupButton, popupText, popupTitle} = declarations()
+popupButton.addEventListener("click", () => {
   popup.close();
 });
 setTimeout(() => {
   popup.showModal();
-  popupTitulo.innerHTML = "Ops!";
-  popupTexto.innerHTML = `As tentativas acabaram! </br> O número secreto era ${geraNumeroSecreto()}. </br> Tente novamente amanhã.`;
+  popupTitle.innerHTML = "Ops!";
+  popupText.innerHTML = `As tentativas acabaram! </br> O número secreto era ${createSecretNumber()}. </br> Tente novamente amanhã.`;
 }, 0);
-tempoNovoJogo();
+newGameTime();
 }
 
 //Função que verifica o chute e responde:
-function verificaChute(tentativasRestantes) {
-  const { dia, mes, ano } = geraData();
-  const {informacaoDica, campoEntrada} = declaracoes()
-  const numeroChute = campoEntrada.value;
-  const numeroSecreto = geraNumeroSecreto();
-  if (numeroChute == numeroSecreto) {
-    localStorage.setItem(`${ano}${mes}${dia}`, 0);
-    avisoVitoria(tentativasRestantes);
-    removeEntrada()
+function checkGuess(remainingAttempts) {
+  const { day, month, year } = getDate();
+  const {tipInformation, numberInput} = declarations()
+  const guessNumber = numberInput.value;
+  const secretNumber = createSecretNumber();
+  if (guessNumber == secretNumber) {
+    localStorage.setItem(`${year}${month}${day}`, 0);
+    victoryWarning(remainingAttempts);
+    removeInput()
   } else {
-    if (numeroChute > numeroSecreto) {
-      informacaoDica.innerHTML += `<span style="color: #00e1ff;">${numeroChute} está acima!</br>`;
-      informacaoDica.style.color = `#00e1ff`;
-      console.log(numeroChute +" acima " + tentativasRestantes)
+    if (guessNumber > secretNumber) {
+      tipInformation.innerHTML += `<span style="color: #00e1ff;">${guessNumber} está acima!</br>`;
+      tipInformation.style.color = `#00e1ff`;
+      console.log(guessNumber +" acima " + remainingAttempts)
     } else {
-      informacaoDica.innerHTML += `<span style="color: #ff1b1b;">${numeroChute} está abaixo!</br>`;
-      informacaoDica.style.color = `#ff1b1b`;
-      console.log(numeroChute + " abaixo " + tentativasRestantes)
+      tipInformation.innerHTML += `<span style="color: #ff1b1b;">${guessNumber} está abaixo!</br>`;
+      tipInformation.style.color = `#ff1b1b`;
+      console.log(guessNumber + " abaixo " + remainingAttempts)
     }
 
-    tentativasRestantes--;
-    localStorage.setItem(`${ano}${mes}${dia}`, tentativasRestantes);
-    if (tentativasRestantes == 0) {
-        tentativasDiarias()
-      avisoDerrota();
+    remainingAttempts--;
+    localStorage.setItem(`${year}${month}${day}`, remainingAttempts);
+    if (remainingAttempts == 0) {
+        dailyAttempts()
+      defeatWarning();
     }
 
   }
-  campoEntrada.value = "";
+  numberInput.value = "";
   main()
 }
 
-const {botaoChute, campoEntrada} = declaracoes()
-const {ano, mes, dia} = geraData()
-botaoChute.addEventListener("click", function () {
-  if (localStorage.getItem(`${ano}${mes}${dia}`) > 0) {
-    verificaChute(main());
+const {guessButton, numberInput} = declarations()
+const {year, month, day} = getDate()
+guessButton.addEventListener("click", function () {
+  if (localStorage.getItem(`${year}${month}${day}`) > 0) {
+    checkGuess(main());
   }
 });
-campoEntrada.addEventListener("keydown", function verificaTecla(event) {
+numberInput.addEventListener("keydown", function verificaTecla(event) {
   if (event.key == "Enter") {
-    if (localStorage.getItem(`${ano}${mes}${dia}`) > 0) {
-      verificaChute(main());
+    if (localStorage.getItem(`${year}${month}${day}`) > 0) {
+      checkGuess(main());
     }
   }
 });
 
 function main() {
-  geraNumeroSecreto();
-  tentativasDiarias();
-  const {informacaoTentativa} = declaracoes()
-  const { dia, mes, ano } = geraData();
-  const tentativasRestantes = parseInt(
-    localStorage.getItem(`${ano}${mes}${dia}`)
+  createSecretNumber();
+  dailyAttempts();
+  const {attemptInformation} = declarations()
+  const { day, month, year } = getDate();
+  const remainingAttempts = parseInt(
+    localStorage.getItem(`${year}${month}${day}`)
   );
-  informacaoTentativa.innerHTML = `Tentativas restantes: ${tentativasRestantes}`
-    return tentativasRestantes
+  attemptInformation.innerHTML = `Tentativas restantes: ${remainingAttempts}`
+    return remainingAttempts
 }
 main()

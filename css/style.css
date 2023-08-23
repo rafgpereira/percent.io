@@ -68,19 +68,16 @@ h1 {
   outline: none;
 }
 
-.dica{
+.tip{
+  height: 80px;
   text-align: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bolder;
   font-size: 1.5rem;
-  margin-top: 50px;
+  margin-top: 20px;
   line-height: 2.5rem;
 }
-.tentativas-restantes{
-  position: fixed;
-  bottom: 17%;
-  left: 50%;
-  transform: translateX(-50%);
+.remaining-attempts{
   text-align: center;
   color: #f1c40f;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
