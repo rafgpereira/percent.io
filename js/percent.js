@@ -16,7 +16,7 @@ function editTime() {
 }
 function createSecretNumber() {
   const { day, month, year } = getDate();
-  const secretNumber = parseInt((year + month * day ** 3) % 100);
+  const secretNumber = parseInt((year + month * day ** 3) % 100) || (day+month);
   document.body.style.setProperty("--progress", secretNumber);
   return secretNumber;
 }
